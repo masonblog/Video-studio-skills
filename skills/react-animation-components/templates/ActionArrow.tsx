@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCurrentFrame, interpolate } from 'remotion';
+import { interpolate } from 'remotion';
 
 interface ActionArrowProps {
   /** 动画进度 0→1（用于控制箭头画出） */
@@ -21,8 +21,6 @@ export const ActionArrow: React.FC<ActionArrowProps> = ({
   label,
   topOffset = 0,
 }) => {
-  const frame = useCurrentFrame();
-
   // 箭头路径：Agent 右侧 → Environment 左侧
   const pathD = 'M 520 380 L 1180 380';
 

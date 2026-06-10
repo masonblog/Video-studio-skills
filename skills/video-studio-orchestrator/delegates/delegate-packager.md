@@ -1,5 +1,7 @@
 # Delegate Packager Prompt Template
 
+> ⚠️ 本提示词与 `stages/stage-6-packaging.md` 描述同一阶段的约束。修改任一文件时必须同步另一处，避免两种派发模式（群聊 / delegate_task）使用不一致的规范。
+
 ## 目标
 为成品视频包生成多平台社交媒体包装发布包。
 

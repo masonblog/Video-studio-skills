@@ -1,5 +1,7 @@
 # Delegate Renderer Prompt Template
 
+> ⚠️ 本提示词与 `stages/stage-5-rendering.md` 描述同一阶段的约束。修改任一文件时必须同步另一处，避免两种派发模式（群聊 / delegate_task）使用不一致的规范。
+
 ## 目标
 基于音频和 `timing.json` 创建 Remotion 项目，进行动画开发与多平台视频渲染。
 

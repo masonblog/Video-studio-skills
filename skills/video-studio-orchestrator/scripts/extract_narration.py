@@ -25,10 +25,13 @@ def extract_narration(script_path: Path) -> str:
     for line in lines:
         stripped = line.strip()
         
-        # Skip empty lines
+        # Empty line ends the current paragraph (single blank line = paragraph pause)
         if not stripped:
+            if current_paragraph:
+                output_paragraphs.append(" ".join(current_paragraph))
+                current_paragraph = []
             continue
-            
+
         # Heading indicates scene transition
         if stripped.startswith("#"):
             # If we had a paragraph in progress, save it
@@ -45,11 +48,13 @@ def extract_narration(script_path: Path) -> str:
         if stripped.startswith("[") and (stripped.endswith("]") or ":" in stripped):
             continue
             
-        # Skip indented VAS list elements (e.g. - "Text" | param)
-        # Check if line is indented and starts with bullet
+        # Skip VAS list elements (e.g. - "Text" | param), indented or not:
+        # indented bullets always belong to a VAS block; flush-left bullets
+        # are treated as VAS elements when they carry a "|" parameter separator
         indent = len(line) - len(line.lstrip())
-        if indent > 0 and (stripped.startswith("-") or stripped.startswith("*")):
-            continue
+        if stripped.startswith("-") or stripped.startswith("*"):
+            if indent > 0 or "|" in stripped:
+                continue
             
         # If it's none of the above, it's a narration line!
         current_paragraph.append(stripped)

@@ -97,6 +97,12 @@ Video Studio Skills 旨在多 Agent 环境中进行视频创作。你可以根�
 - **[edge-tts](https://github.com/rany2/edge-tts)** — 中文 TTS 配音
 - **ffmpeg** — 音频处理 + 视频编码
 
+部分 Agent Persona 还会引用以下 Hermes skill（缺失时 Agent 会优雅降级为通用模式，但建议安装以获得完整体验）：
+
+- `plan` — Director 规划阶段
+- `humanizer` — Editor 去 AI 化润色
+- `arxiv` / `web-content-extraction` / `youtube-content` — Researcher 资料调研
+
 ## 路径约定
 
 Repo 中使用了以下占位符，安装时按实际环境调整：
@@ -126,15 +132,14 @@ Video-studio-skills/
 │       ├── SKILL.md
 │       ├── references/
 │       └── templates/             ← 11 个 Remotion React 组件
-├── agent-personas/
-│   ├── video-director.md
-│   ├── video-researcher.md
-│   ├── video-writer.md
-│   ├── video-editor.md
-│   ├── video-narrator.md
-│   ├── video-renderer.md
-│   └── video-packager.md
-└── docs/
+└── agent-personas/
+    ├── video-director.md
+    ├── video-researcher.md
+    ├── video-writer.md
+    ├── video-editor.md
+    ├── video-narrator.md
+    ├── video-renderer.md
+    └── video-packager.md
 ```
 
 ## 许可证

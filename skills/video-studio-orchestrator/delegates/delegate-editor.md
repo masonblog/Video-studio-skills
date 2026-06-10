@@ -1,5 +1,7 @@
 # Delegate Editor Prompt Template
 
+> ⚠️ 本提示词与 `stages/stage-3-humanizing.md` 描述同一阶段的约束。修改任一文件时必须同步另一处，避免两种派发模式（群聊 / delegate_task）使用不一致的规范。
+
 ## 目标
 对脚本草稿进行“去 AI 化”润色并生成修改报告，输出 `script-final.md`。
 

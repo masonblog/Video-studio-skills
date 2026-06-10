@@ -7,7 +7,7 @@ import { CodeBlock } from './CodeBlock';
 import { ActionArrow } from './ActionArrow';
 import { ObserveArrow } from './ObserveArrow';
 
-interface ReActRound {
+export interface ReActRound {
   thought: string;
   action: string;
   observation: string;
@@ -56,8 +56,8 @@ export const ReActLoop: React.FC<ReActLoopProps> = ({
 
         if (!isActive) return null;
 
-        // 三个阶段各占 1/3
-        const phaseLength = roundDuration / 3;
+        // 三个阶段各占 1/3（下限 1 帧，防止 roundDuration=0 时 interpolate 输入范围塌缩）
+        const phaseLength = Math.max(roundDuration / 3, 1);
         const thoughtProgress = interpolate(roundFrame, [0, phaseLength], [0, 1], {
           extrapolateRight: 'clamp',
         });
