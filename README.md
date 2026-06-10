@@ -31,6 +31,18 @@ Director（导演/编排）
 
 ## 安装与配置
 
+### 方式一：AI 自动安装（推荐）
+
+将以下指令发送给你的 AI Agent，让它自动读取并配置：
+
+```text
+请帮我安装并配置这个项目：https://github.com/masonblog/Video-studio-skills.git
+```
+
+*(注：Agent 会自动读取项目中的 `AGENTS.md` 了解架构并执行必要的安装与配置)*
+
+### 方式二：手动安装
+
 ```bash
 # 1. 克隆仓库
 git clone https://github.com/masonblog/Video-studio-skills.git
@@ -59,7 +71,7 @@ done
 
 Video Studio Skills 旨在多 Agent 环境中进行视频创作。你可以根据偏好选择以下三种模式来运行视频生成管线：
 
-### 1. 群聊模式 (Group Chat Mode)  (默认推荐)
+### 1. 群聊模式 (Group Chat Mode)  (推荐)
 
 **适合场景**：想全程观察 Agent 间的协作，且随时需要插话或调整方向。
 
