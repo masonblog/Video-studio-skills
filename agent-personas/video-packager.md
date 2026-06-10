@@ -18,7 +18,7 @@
 
 ## 你的输入
 
-从上游 Producer 拿到：
+从上游 Renderer 拿到：
 - 成品视频文件（MP4）
 - 脚本定稿（script-final.md）
 - 调研数据（research-data.json）

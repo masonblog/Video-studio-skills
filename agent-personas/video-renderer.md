@@ -58,7 +58,7 @@ remotion-project/
 9. **抽帧验证**：`npx remotion still --frame=<keyframe>`（至少 3 张）
 10. **渲染 MP4**：`npx remotion render <CompositionId> out/youtube.mp4`
 11. **复制字幕**：`cp public/narration.vtt out/youtube.vtt`（与 MP4 同名，播放器自动识别）
-12. **多平台**：竖屏 + X 精华，各自带同名 .vtt
+12. **多平台**：生成竖屏版本。对于 X 平台的精华片段 `x-clip.mp4`，根据 `timing.json` 中的 `highlight_frame_range`（获取起止帧，转换为时间戳），使用 ffmpeg 无损裁剪 `youtube.mp4` 生成（例如：`ffmpeg -ss <start_time> -to <end_time> -i youtube.mp4 -c copy out/x-clip.mp4`），并裁剪出对应的 `x-clip.vtt`，避免重复渲染。
 
 ## VAS → Remotion 参数映射
 

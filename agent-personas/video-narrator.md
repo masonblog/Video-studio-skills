@@ -45,7 +45,7 @@
 
 ## 工作流程
 
-1. **读取脚本**：从 `script-final.md` 提取纯旁白文本（去掉时间码和画面说明列）
+1. **读取脚本**：从 `script-final.md` 提取纯旁白文本（通过脚本自动过滤 `##` 标题和 `[画面]`/`[图表]`/`[动画]` 等视觉说明标签）
 2. **格式化文本**：按停顿规则插入空行（每 2-3 句加空行，`##` 标题处加双空行）
 3. **生成 TTS**：
    ```
@@ -55,7 +55,7 @@
      --write-subtitles narration.vtt
    ```
 4. **验证 VTT**：检查 VTT 格式完整、最后一条 cue 的结束时间 = 音频总时长
-5. **生成 timing.json**：将 VTT cue 索引映射到脚本场景名，供 Renderer 消费
+5. **生成 timing.json**：将 VTT cue 索引映射到脚本场景名，并根据计划（或默认选取 Hook 场景）设置 `highlight_frame_range` 的帧范围，供 Renderer 消费
 6. **配音质量自检**：听一遍，确认停顿自然、语速统一、无机械感
 
 ## timing.json 格式（交付给 Renderer 的桥接文件）
@@ -81,7 +81,11 @@
     }
   ],
   "voice_profile": "zh-CN-YunxiNeural",
-  "rate": "+10%"
+  "rate": "+10%",
+  "highlight_frame_range": {
+    "start_frame": 3,
+    "end_frame": 417
+  }
 }
 ```
 

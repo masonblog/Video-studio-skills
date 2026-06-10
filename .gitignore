@@ -11,7 +11,21 @@ Thumbs.db
 
 # Node (if anyone runs npm in repo root)
 node_modules/
+.remotion/
+out/
+build/
+.cache/
 
 # Python
 __pycache__/
 *.pyc
+
+# Video Projects and Deliverables
+video-projects/
+*.mp4
+*.mp3
+*.vtt
+deliverables/
+
+# Local configuration overrides
+.env

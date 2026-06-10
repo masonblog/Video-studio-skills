@@ -21,7 +21,7 @@ import { staticFile } from 'remotion';
 
 9-10 分钟视频在单核 ARM 服务器上渲染约需 30-40 分钟。`delegate_task` 默认 600s 超时通常不够。策略：
 
-1. **分流模式**：Producer 只负责代码 + TTS，Director 承担最终 `npx remotion render`
+1. **分流模式**：Narrator/Renderer 分别负责语音和代码，Director 承担最终 `npx remotion render`
 2. **后台渲染**：`terminal(background=true, notify_on_complete=true)` + 600s timeout
 3. **帧数估算**：`时长秒数 × 30fps`，单核 ARM 约 1 frame/0.12s，预估总时间
 
