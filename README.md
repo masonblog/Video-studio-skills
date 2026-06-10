@@ -1,12 +1,10 @@
-# Video Studio Skills 🎬
+# Video Studio Skills | 多 Agent 协作视频创作技能集
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Hermes Agent](https://img.shields.io/badge/Hermes-Agent-8A2BE2)](https://github.com/NousResearch/hermes-agent)
 [![Remotion](https://img.shields.io/badge/Remotion-Video-blue?logo=react)](https://remotion.dev)
 [![Python](https://img.shields.io/badge/Python-Scripts-3776AB?logo=python&logoColor=white)](https://python.org)
 [![FFmpeg](https://img.shields.io/badge/FFmpeg-Media-007808?logo=ffmpeg&logoColor=white)](https://ffmpeg.org)
-
-> **AI 驱动的多 Agent 协作视频创作技能集** — 7 个 Agent × 6 个阶段，从选题到发布全程自动化。
 
 **Video Studio Skills** 是一套面向 [Hermes Agent](https://github.com/NousResearch/hermes-agent) 的一站式视频创作技能包。它让你用 7 个 AI Agent 组成一个视频工作室——从深度调研、脚本写作、中文 TTS 配音到 Remotion 动画渲染、多平台 SEO 包装，全部由 Agent 协作完成。
 
