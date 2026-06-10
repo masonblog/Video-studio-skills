@@ -2,6 +2,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Hermes Agent](https://img.shields.io/badge/Hermes-Agent-8A2BE2)](https://github.com/NousResearch/hermes-agent)
+[![Remotion](https://img.shields.io/badge/Remotion-Video-blue?logo=react)](https://remotion.dev)
+[![Python](https://img.shields.io/badge/Python-Scripts-3776AB?logo=python&logoColor=white)](https://python.org)
+[![FFmpeg](https://img.shields.io/badge/FFmpeg-Media-007808?logo=ffmpeg&logoColor=white)](https://ffmpeg.org)
 
 > **AI 驱动的多 Agent 协作视频创作技能集** — 7 个 Agent × 6 个阶段，从选题到发布全程自动化。
 
