@@ -28,7 +28,7 @@ Director（导演/编排）
 
 | 模块 | 内容 | 用途 |
 |------|------|------|
-| **`video-studio-orchestrator`** skill | 完整 6 阶段管线编排 + 14 篇参考文档 | 管线总控 |
+| **`video-studio-orchestrator`** skill | 模块化的 6 阶段管线编排 (stages/delegates) + 参考文档 | 管线总控 |
 | **`react-animation-components`** skill | 11 个 Remotion React 组件 | 视频动画渲染 |
 | **agent-personas/** | 7 个 Agent 角色定义 (SOUL.md) | 创建 Hermes Profile |
 | **scripts/** | 2 个辅助脚本 | VTT 解析 / 旁白提取 |
@@ -93,9 +93,11 @@ Video-studio-skills/
 ├── AGENTS.md
 ├── skills/
 │   ├── video-studio-orchestrator/
-│   │   ├── SKILL.md              ← 管线编排技能
-│   │   ├── references/            ← 14 篇参考：管线计划模板、视觉动画指南等
-│   │   └── scripts/               ← VTT→TS 解析 / 旁白提取
+│   │   ├── SKILL.md              ← 管线编排技能（入口）
+│   │   ├── stages/                ← 各阶段 (Stages 0-6) 详细执行规范
+│   │   ├── delegates/             ← 各角色委派任务提示词模板
+│   │   ├── references/            ← 参考文档：管线计划模板、视觉动画指南等
+│   │   └── scripts/               ← VTT→TS 解析 / 旁白提取 (Python)
 │   └── react-animation-components/
 │       ├── SKILL.md
 │       ├── references/
