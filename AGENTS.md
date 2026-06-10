@@ -44,8 +44,10 @@ Follow the instructions in `README.md`.
 | File/Dir | Purpose |
 |-----------|---------|
 | `skills/video-studio-orchestrator/SKILL.md` | Master orchestrator skill — load this first |
+| `skills/video-studio-orchestrator/stages/` | Detailed specifications for stages 0-6 |
+| `skills/video-studio-orchestrator/delegates/` | Delegate task prompt templates for each role |
 | `skills/video-studio-orchestrator/references/` | Templates, guides, troubleshooting |
-| `skills/video-studio-orchestrator/scripts/` | vtt-to-subtitles.py, extract-narration.sh |
+| `skills/video-studio-orchestrator/scripts/` | vtt_to_subtitles.py, extract_narration.py |
 | `skills/react-animation-components/SKILL.md` | Remotion component library — load for rendering |
 | `skills/react-animation-components/templates/` | 11 TypeScript React components |
 | `agent-personas/` | SOUL.md files for each of the 7 pipeline agents |
