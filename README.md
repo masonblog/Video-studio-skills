@@ -6,7 +6,7 @@
 [![Python](https://img.shields.io/badge/Python-Scripts-3776AB?logo=python&logoColor=white)](https://python.org)
 [![FFmpeg](https://img.shields.io/badge/FFmpeg-Media-007808?logo=ffmpeg&logoColor=white)](https://ffmpeg.org)
 
-**Video Studio Skills** 是一套面向 [Hermes Agent](https://github.com/NousResearch/hermes-agent) 的一站式视频创作技能包。它让你用 7 个 AI Agent 组成一个视频工作室——从深度调研、脚本写作、中文 TTS 配音到 Remotion 动画渲染、多平台 SEO 包装，全部由 Agent 协作完成。
+**Video Studio Skills** 是一套面向 [Hermes Agent](https://github.com/NousResearch/hermes-agent) 的一站式视频创作技能集。它让你用 7 个 AI Agent 组成一个视频工作室，从查资料、写脚本、配旁白、做动画、到各个视频平台的标题和简介包装，这一整个流程都能让特性各异的 AI Agent 来合作完成。你只需要提供选题，AI 就能像流水线一样为你批量生产视频。
 
 ---
 
