@@ -1,5 +1,7 @@
 # Delegate Narrator Prompt Template
 
+> ⚠️ 本提示词与 `stages/stage-4-narration.md` 描述同一阶段的约束。修改任一文件时必须同步另一处，避免两种派发模式（群聊 / delegate_task）使用不一致的规范。
+
 ## 目标
 提取脚本旁白，利用 `edge-tts` 生成配音音频、VTT 字幕，并输出 `timing.json`。
 

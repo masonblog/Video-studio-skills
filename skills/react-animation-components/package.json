@@ -1,0 +1,16 @@
+{
+  "name": "react-animation-components",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Type-check harness for the Remotion component templates in this skill",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.0",
+    "typescript": "^5.5.0"
+  }
+}

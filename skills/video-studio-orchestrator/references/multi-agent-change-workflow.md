@@ -40,7 +40,7 @@ A behavioral change that only updates SKILL.md will silently do nothing in group
 
 ### Phase 4: Reference Files
 
-1. Update `references/agent-personas.md` to align with SOUL.md changes
+1. Update the persona files in the repo's `agent-personas/` directory to align with SOUL.md changes
 2. Create new templates in `references/` if needed
 3. Update the Reference Files table in SKILL.md
 

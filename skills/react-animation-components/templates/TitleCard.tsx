@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCurrentFrame, spring, interpolate } from 'remotion';
+import { useCurrentFrame, useVideoConfig, spring, interpolate } from 'remotion';
 
 interface TitleCardProps {
   title: string;
@@ -21,11 +21,12 @@ export const TitleCard: React.FC<TitleCardProps> = ({
   height,
 }) => {
   const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
 
   // 弹入
   const scale = spring({
     frame,
-    fps: 30,
+    fps,
     config: { damping: 15, stiffness: 100 },
   });
 
@@ -49,7 +50,7 @@ export const TitleCard: React.FC<TitleCardProps> = ({
   // 装饰线
   const lineWidth = spring({
     frame: Math.max(0, frame - 20),
-    fps: 30,
+    fps,
     config: { damping: 20, stiffness: 80 },
   });
 
