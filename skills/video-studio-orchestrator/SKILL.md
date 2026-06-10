@@ -132,151 +132,49 @@
 132|
 133|## Pipeline Stages
 134|
-135|### Stage 0: Planning (Director — 必须先执行)
+135|多 Agent 协作视频创作管线由 7 个 Agent 依次接力完成，划分为以下 6 个阶段（外加 Stage 0 总体规划）。有关各阶段的详细运行定义、输入输出协议及规范，请点击查看对应的子模块文档：
 136|
-137|**Input:** Topic from user | **Output:** `pipeline-plan.md`
-138|
-139|Director 收到选题后，不能直接派发任务。必须先加载 `plan` skill 方法论，创建 7 章节规划文档。这是全管线的"宪法"——每个 Agent 在开始自己的阶段前，必须先读 pipeline-plan.md 对齐全局策略。
-140|
-141|**Plan 7 章节：**
-142|1. **选题评估**：话题价值、目标观众、差异化角度、风险
-143|2. **叙事策略**：核心故事线（一句话）、Hook 策略、Aha 时刻分布、情感曲线、参照风格
-144|3. **研究策略**：核心搜索关键词（中/英文）、必查来源、对立观点要求
-145|4. **视觉风格**：配色方案、动画风格、参考视觉
-146|5. **管线分工**：6 个 Stage 的输入→输出→质量标准表
-147|6. **质量红线**：不可接受的底线
-148|7. **风险与预案**：概率评估 + 应急预案
-149|
-150|Plan 模板见 `references/pipeline-plan-template.md`。
+137|- **[Stage 0: Planning (总体规划)](stages/stage-0-planning.md)** (Director)
+138|  - 收到选题后必须首先执行。产出 `pipeline-plan.md`（项目宪法），定义全管线选题角度、叙事及视觉基调。
+139|- **[Stage 1: Research (深度调研)](stages/stage-1-research.md)** (Researcher)
+140|  - 根据 Plan 策略检索 arXiv/Semantic Scholar/Web，产出结构化 `research-data.json`（提供 URL 出处与知识盲区）。
+141|- **[Stage 2: Script Writing (故事脚本创作)](stages/stage-2-writing.md)** (Writer)
+142|  - “小Lin说”式朋友聊天语气，故事推进。输出包含 VAS 视觉动画规格标签的 `script-draft.md`。
+143|- **[Stage 3: Humanizing (脚本去 AI 化与口语润色)](stages/stage-3-humanizing.md)** (Editor)
+144|  - 清除 29 项 AI 写作痕迹与翻译腔，进行朗读气口调整，**严格保护 VAS 标记不变**，输出 `script-final.md`。
+145|- **[Stage 4: TTS Narration (旁白配音与时间生成)](stages/stage-4-narration.md)** (Narrator)
+146|  - 提取纯旁白，应用行空停顿规则，通过 edge-tts 生成 `narration.mp3` 与 `narration.vtt`，输出时序桥接文件 `timing.json`。
+147|- **[Stage 5: Remotion Rendering (Remotion 动效开发与渲染)](stages/stage-5-rendering.md)** (Renderer)
+148|  - 依契约文件 `timing.json` 确定 Sequence 帧边界，使用 `react-animation-components` 组件库进行 VAS 参数至 Remotion 原语的映射开发，输出 youtube、vertical 视频，并无损截取 x-clip 精华。
+149|- **[Stage 6: Packaging & SEO (分发渠道包装)](stages/stage-6-packaging.md)** (Packager)
+150|  - 针对 YouTube (5维标题评分/章节/封面 brief)、B站 (互动弹幕引导)、X (Twitter thread) 生成最终的 `deliverables/` 分发包。
 151|
-152|**Plan 在两种模式中的传递：**
-153|- **delegate_task 模式：** 每个 delegate 的 `context` 首行 = `pipeline-plan.md 路径：{VIDEO_PROJECTS_ROOT}/{project}/pipeline-plan.md`
-154|- **Kanban 模式：** T0 任务产出 pipeline-plan.md，后续任务的 body 中引用路径
-155|- **群聊 @mention 模式：** Director 创建 plan 后在 @researcher 消息中注明 plan 路径
-156|
-157|### Stage 1: Research (Director → Researcher)
+152|### Director Final Review
+153|
+154|After Packager completes (or pipeline finishes in delegate_task mode), Director performs final quality review:
+155|
+156|1. Verify `deliverables/` directory completeness (all platform packages present, metadata.json valid)
+157|2. Announce completion in group chat with a checklist covering all 6 stages, their outputs, and a quality summary
 158|
-159|**Input:** Topic keywords | **Output:** `research-data.json`
-160|
-161|Researcher uses `arxiv`, `web-content-extraction`, `youtube-content`, Semantic Scholar. Output JSON with: `core_papers`, `key_facts` (with source URLs), `competing_views`, `knowledge_gaps`, `timeline`.
-162|
-163|### Stage 2: Script Writing (Director → Writer)
-164|
-165|**Input:** `research-data.json` | **Output:** `script-draft.md` (three-column format)
-166|
-167|**风格：小Lin说式故事叙述** — 用类比、比喻和具体案例讲述复杂概念。口播语调像朋友聊天，而非教学课件。每段旁白应有完整的起承转合，而非一句一个画面。
-168|
-169|结构：Hook（制造好奇/冲突, ~30s）→ 铺垫（引入背景/问题, ~20%）→ 核心展开（层层深入, ~50%）→ 总结/延伸（联系现实, ~30%）
-170|
-171|**场景粒度：** 8-10分钟视频 ≈ 10-15个场景。每个场景是一个"故事节拍"——一个完整的概念、一组数据对比、或一段因果推演。旁白 80-200字/场景，自然段落。
-172|
-173|动画标记：AI主题用 `[REACT_ANIM_CUE:*]`；其他领域用 `references/non-ai-topic-adaptation.md` 的领域标记。
-174|
-175|**输出格式：Markdown Section 脚本**（非表格）。每个 `## {场景名} — {概括}` 是一个场景，内含旁白段落 + `[画面]`/`[图表]`/`[动画]` 视觉标签。
-176|
-177|```markdown
-178|## Hook — 比特币的疯狂
-179|
-180|你有没有想过，如果你在 2009 年买了 100 块钱比特币，今天你有 3 个亿。但如果你在 2011 年买了——对不起，你大概率在 2013 年就卖了。
-181|
-182|[画面:entrance=fade-in,dur=30f,pos=center]
-183|  - 比特币价格曲线暴涨 | animate=line-draw, color=#F7931A, dur=25f
-184|  - "¥100 → ¥300,000,000" | entrance=char-pop(60px), stagger=4f, color=#FFD700, delay=35f
-185|[图表:entrance=slide-up(50px),dur=20f]
-186|  - 早期比特币交易量 vs 价格对比 | animate=bars-grow, color=#F7931A
-187|
-188|## Act1_A — 为什么是 2009 年
-189|
-190|2009 年，金融危机刚结束。雷曼兄弟倒掉一年后，全世界对银行系统失去了信任。就在这个时候，一个叫中本聪的人在密码学邮件列表里发了一篇只有 9 页的论文...
-191|
-192|[画面:entrance=fade-in,dur=40f,pos=fullscreen]
-193|  - 2008-2009 金融危机新闻标题蒙太奇 | entrance=fade-in, stagger=8f
-194|[动画:entrance=slide-up(80px),dur=30f]
-195|  - 密码学邮件列表界面 | entrance=fade-in, dur=15f
-196|  - 比特币白皮书飞出 | entrance=slide-up(100px), delay=20f, dur=20f
-197|```
-198|
-199|**视觉标签规范 (VAS)：**
-200|
-201|每个标签必须包含 `entrance`（入场动画类型）和 `dur`（持续帧数，30fps）。详细参数表见 `references/writer-visual-animation-guide.md`。
-202|
-203|```
-204|基本格式：[TYPE:entrance=动画类型,dur=Nf,pos=位置]
-205|```
-206|
-207|| 标签 | 用途 | 常用 entrance |
-208||------|------|--------------|
-209|| `[画面:entrance=fade-in,dur=30f]` | 一般场景/背景画面 | fade-in, slide-up(Npx) |
-210|| `[图表:entrance=slide-up(60px),dur=25f]` | 数据可视化 | slide-up, fade-in, spring-scale |
-211|| `[动画:entrance=spring-scale,dur=20f]` | 复杂动效元素 | spring-scale, char-pop(Npx) |
-212|| `[转场:type=crossfade,dur=30f]` | 场景间过渡 | crossfade, slide-push-left, zoom-in |
-213|| `[REACT_ANIM_CUE:*]` | AI 推理动画标记 | 保持原有格式不变 |
-214|
-215|**元素级规格：** 一个标签下可用缩进列表逐元素描述，格式 `"文本" | 参数列表`：
-216|```markdown
-217|[画面:entrance=fade-in,dur=30f,pos=center]
-218|  - "$5,000,000,000,000" | entrance=char-pop(80px), stagger=4f, color=#76B900
-219|  - "全球首家五万亿美元公司" | entrance=fade-in, delay=90f, color=#999
-220|```
-221|
-222|⚠️ **禁止笼统描述：** 不得写出「数字弹出」「画面倒带」「对比动画」等无参数的模糊描述。必须用 VAS 参数指定具体动画类型。
-223|
-224|详细参数词汇表、组件映射、完整示例 → 加载 `references/writer-visual-animation-guide.md`。
-225|
-226|> ⚠️ 场景名用 Hook, Act1_A, Act1_B... 不要写时间码。实际时长由 Narrator TTS → timing.json（TTS-First）决定。
-227|
-228|### Stage 3: Humanizing (Director → Editor)
-229|
-230|**Input:** `script-draft.md` | **Output:** `script-final.md` + change report
-231|### Stage 4: TTS Narration (Director → Narrator)
-232|
-233|**Input:** `script-final.md` | **Output:** `narration.mp3` + `narration.vtt` + `timing.json`
-234|
-235|Narrator extracts narration text, formats with natural pauses (`\n\n` between paragraphs, `\n\n\n` between sections), generates edge-tts voiceover, then parses VTT to produce `timing.json` — the bridge file that maps scene names to exact frame ranges. This is the TTS-First handoff: Renderer consumes `timing.json` directly, no need to compute timing.
-236|
-237|**timing.json format:**
-238|```json
-239|{
-240|  "total_duration_seconds": 458.9,
-241|  "total_frames_30fps": 13767,
-242|  "scenes": [
-243|    {"name": "Hook", "cue_start": 1, "cue_end": 8, "start_frame": 3, "end_frame": 417}
-244|  ],
-245|  "voice_profile": "zh-CN-YunxiNeural", "rate": "+10%"
-246|}
-247|```
-248|
-249|### Stage 5: Remotion Rendering (Director → Renderer)
-250|
-251|**Input:** `narration.mp3` + `narration.vtt` + `timing.json` + `script-final.md` | **Output:** MP4 + Remotion project
-252|
-253|Renderer creates the Remotion project, builds scene components matched to the topic's visual vocabulary, and renders multi-platform MP4s. Scene timing comes EXCLUSIVELY from `timing.json`. **Subtitles are external VTT, not burned-in** — each MP4 has a same-named `.vtt` file that players (YouTube, VLC, IINA) auto-load. This avoids re-rendering for subtitle edits.
-254|
-255|Workflow: `npx create-video` → copy `narration.mp3` + `narration.vtt` to `public/` → build scenes (NO `<Subtitles>` component) → `<Sequence>` with timing.json → preview → still check → render MP4 → `cp narration.vtt out/youtube.vtt` → multi-platform.
-256|
-257|### Stage 6: Packaging & SEO (Director → Packager)
-258|
-259|**Input:** MP4 + script + research | **Output:** `deliverables/`
-260|
-261|```
-262|deliverables/
-263|├── metadata.json
-264|├── youtube/  (title-candidates with scores, description with chapters, tags, thumbnail-brief)
-265|├── x-twitter/ (thread, clip-spec)
-266|├── bilibili/  (titles, description with danmaku guidance)
-267|└── README.md
-268|```
-269|
-270|Title scoring: curiosity gap(30%) + search match(25%) + emotion(20%) + brevity(15%) + honesty(10%). No clickbait. Thumbnail brief includes ready-to-use `image_generate` prompt.
-271|
-272|### Director Final Review
-273|
-274|After Packager completes (or pipeline finishes in delegate_task mode), Director performs final quality review:
-275|
-276|1. Verify `deliverables/` directory completeness (all platform packages present, metadata.json valid)
-277|2. Announce completion in group chat with a checklist covering all 6 stages, their outputs, and a quality summary
-278|
-279|## Quality Gates
+279|### Rework Protocol & Version Control (返工协议与版本控制)
+280|
+281|当 Director 在质量关卡发现产物不合格时，将触发返工流程以确保管线产出质量：
+282|
+283|1. **返工判定与发起**：
+284|   - **🟢 小修**：对于错别字或微调格式，由 Director 直接在执行中修复，不触发返工。
+285|   - **🟡 中修**：逻辑漏洞、场景字数不足、缺少 VAS 参数等。由 Director 指示当前阶段 Agent 返工修改。
+286|   - **🔴 大修**：完全跑题、风格严重偏离 Plan、捏造事实等。由 Director 判定退回到上游源头阶段重新制作。
+287|
+288|2. **版本命名规范**：
+289|   - 首次交付产物命名为规范原名，如 `script-draft.md`。
+290|   - 返工时的历史版本将被移动至项目目录的 `.versions/` 子目录下进行归档，命名为 `[原文件名].v1.md`，`[原文件名].v2.md`，以此类推。
+291|   - 最终通过质量关卡并供下游消费的文件，始终使用无版本号的规范原名。
+292|
+293|3. **返工上限**：
+294|   - 每个阶段最多允许自动返工 **2 次**。
+295|   - 若第 3 次交付依旧不合格，Director 将暂停自动管线，发出警告请求人类介入干预。
+296|
+297|## Quality Gates
 280|
 281|| Gate | Check |
 282||------|-------|
@@ -290,127 +188,15 @@
 290|
 291|## Delegate Prompt Templates
 292|
-293|### Delegate Researcher
-294|```
-295|Goal: 深度调研「{topic}」，输出结构化 research-data.json
-296|Context: pipeline-plan.md 路径：{VIDEO_PROJECTS_ROOT}/{project}/pipeline-plan.md
-297|  项目路径 {VIDEO_PROJECTS_ROOT}/{project}/，输出 research-data.json
-298|  搜索：arXiv + Semantic Scholar + web。中文资料优先知乎/微信公众号
-299|  至少 3 篇论文(标注引用)、5 条事实(出处URL)、1 个对立观点、标注知识盲区
-300|  **先读取 pipeline-plan.md，严格遵循其中的研究策略和关键词**
-301|Tools: web, terminal, file | Skills: arxiv, web-content-extraction, youtube-content
-302|```
-303|
-304|### Delegate Writer
-305|```
-306|Goal: 基于 research-data.json 创作"小Lin说"风格的视频脚本
-307|
-308|Context: 
-309|  pipeline-plan.md 路径：{VIDEO_PROJECTS_ROOT}/{project}/pipeline-plan.md（先读取，遵循叙事策略和视觉风格）
-310|  目标风格：故事驱动的中等深度讲解。用类比和比喻让复杂概念好懂。
-311|  口播语调：像朋友聊天——自然、有节奏、偶尔反问或感叹。不是教学课件。
-312|  
-313|  叙事结构：
-314|  1. Hook（~30s）：制造好奇或冲突——抛出一个反直觉的问题/现象/数据。不要"大家好我是xxx"。
-315|  2. 铺垫（~20%）：引入背景、定义关键概念、建立"为什么这很重要"。
-316|  3. 核心展开（~50%）：层层深入。每层一个"故事节拍"——用案例、数据对比、因果推演推进。
-317|  4. 总结/延伸（~30%）：联系现实、给出"takeaway"、或留一个开放性问题。
-318|  
-319|  场景粒度：8-10分钟视频 ≈ 10-15个场景。每个场景 80-200字中文旁白，是一个完整的故事节拍。
-320|  Aha 时刻：每 90 秒左右安排一个"原来如此"的转折或洞察。
-321|  
-322|  输出格式：Markdown section 脚本（非表格）。每个 `## {场景名} — {一句话概括}` 是一个场景区块：
-323|
-324|## {场景名} — {一句话概括}
-325|
-326|{80-200字旁白，自然段落，像朋友聊天}
-327|
-328|[画面:entrance=fade-in,dur=30f,pos=center]
-329|  - "关键数字/文字" | entrance=char-pop(80px), stagger=4f, color=#FFD700
-330|
-331|  场景名用 Hook, Act1_A, Act1_B...（不要时间码）
-332|
-333|  视觉动画规格 (VAS) — 必须遵守：
-334|  - 每个 [画面]/[动画]/[图表] 标签必须携带 entrance= 和 dur=Nf 参数
-335|  - 完整参数词汇表见 references/writer-visual-animation-guide.md（加载此文档获取）
-336|  - 常用 entrance：fade-in, slide-up(Npx), char-pop(Npx), spring-scale, typewriter
-337|  - 常用 animate：bars-grow, line-draw, count-up, pulse, float
-338|  - 转场用 [转场:type=crossfade,dur=30f]
-339|  
-340|  元素级规格：画面内多个元素用缩进列表逐行描述
-341|  格式："文本内容" | entrance=动画, delay=Nf, color=#xxx, size=XXpx
-342|  
-343|  常用参数速查：
-344|  entrance=fade-in | slide-up(60px) | char-pop(80px) | spring-scale | typewriter
-345|  dur=30f | delay=40f | stagger=4f | color=#FFD700 | size=48px
-346|  animate=bars-grow | line-draw | count-up | pulse
-347|  
-348|  ⚠️ 绝对禁止：
-349|  - 不要写笼统的"画面倒带""数字弹出""对比动画"——必须指定 entrance 类型
-350|  - 不要写"大家好欢迎来到xx频道"
-351|  - 不要每句话一个独立场景（碎片化）
-352|  - 不要用教科书式的"第一点...第二点..."罗列
-353|  - 不要写时间码
-354|  
-355|Tools: file, terminal | Skills: baoyu-comic, songwriting-and-ai-music
-356|```
-357|
-358|### Delegate Editor
-359|```
-360|Goal: 去 AI 化润色 script-draft.md
-361|Context: 输出 script-final.md + 修改报告。humanizer 29 条全扫描
-362|  中文专项：成语滥用/翻译腔/过度正式。朗读测试。每条修改标注原因
-363|Tools: file | Skills: humanizer
-364|```
-365|
-366|### Delegate Narrator
-367|```
-368|Goal: 提取脚本旁白 → 生成 TTS 配音 + timing.json
-369|Context: pipeline-plan.md 路径：{VIDEO_PROJECTS_ROOT}/{project}/pipeline-plan.md（先读取，了解预期时长和场景结构）
-370|  脚本为 Markdown section 格式（`## 场景名 — 概括` + 旁白段落 + `[画面]`/`[图表]` 标签）
-371|  提取方法：用 `bash scripts/extract-narration.sh script-final.md` 提取纯旁白（自动过滤 ## 标题和视觉标签）
-372|  按停顿规则加空行(\n\n段落间/\n\n\n场景间)
-373|  生成: edge-tts --voice zh-CN-YunxiNeural --rate=+10% -f narration.txt
-374|        --write-media narration.mp3 --write-subtitles narration.vtt
-375|  解析VTT → timing.json（映射cue索引到场景名+帧范围）
-376|  注意：脚本旁白每场景 80-200字（故事体），TTS朗读会更自然流畅。用 \n\n 断句，用 \n\n\n 断场景。
-377|Tools: terminal, file
-378|```
-379|
-380|### Delegate Renderer
-381|```
-382|Goal: 基于 narration.mp3 + timing.json 创建 Remotion 项目 → 渲染 MP4
-383|Context: pipeline-plan.md 路径：{VIDEO_PROJECTS_ROOT}/{project}/pipeline-plan.md（先读取，遵循视觉风格）
-384|  读取 timing.json → 场景帧范围。npx create-video。复制narration.mp3+narration.vtt到public/
-385|  脚本为 Markdown section 格式，视觉指令在 `[画面]`/`[图表]`/`[动画]`/`[REACT_ANIM_CUE:*]`/`[转场]` 标签中
-386|  ⚠️ 脚本使用 VAS (Visual Animation Spec) 视觉动画规格语言——每个标签携带 entrance=, dur=Nf 等参数
-387|  参数直接映射到 Remotion 动画原语：
-388|  - entrance=fade-in → interpolate(f, [start, start+dur], [0,1], {extrapolateRight:'clamp'})
-389|  - entrance=slide-up(N) → translateY: interpolate(f, [start, start+dur], [N, 0]) + opacity fade
-390|  - entrance=char-pop(N) → 逐字符 stagger translateY + opacity, delay=charIndex*stagger
-391|  - entrance=spring-scale → spring({frame: f-start, fps: 30, config: {damping:12, stiffness:100}})
-392|  - animate=bars-grow → scaleY: interpolate(f, [start, start+dur], [0, 1])
-393|  - animate=line-draw → SVG strokeDashoffset interpolate
-394|  - stagger=Nf → const delay = index * N
-395|  - pos=center → flex center | pos=bottom-right → position:absolute, bottom:0, right:0
-396|  完整参数映射见 references/writer-visual-animation-guide.md（加载此文档获取映射表）
-397|  ⚠️ VAS 中的 dur 是元素动画时长，场景总时长始终从 timing.json 取——不改不算不质疑
-398|  字幕不烧录——cp narration.vtt out/youtube.vtt 外挂字幕，播放器自动识别
-399|  开发场景组件（不引入<Subtitles>组件）。Sequence用timing.json值
-400|  先预览(npx remotion studio)→抽帧→渲染(1920×1080+竖屏+X精华)
-401|  ⚠️ Audio必须用staticFile("narration.mp3")
-402|Tools: terminal, file | Skills: remotion, react-animation-components
-403|```
-404|
-405|### Delegate Packager
-406|```
-407|Goal: 为成品视频创建社交媒体包装
-408|Context: pipeline-plan.md 路径：{VIDEO_PROJECTS_ROOT}/{project}/pipeline-plan.md（先读取，了解目标平台和受众定位）
-409|  输出 deliverables/。YouTube: ≥3标题(5维评分)+描述(章节)+关键词
-410|  X/Twitter: thread+精华片段。Bilibili: 标题+弹幕引导。缩略图简报(含AI prompt)
-411|Tools: file
-412|```
-413|
+293|在 `delegate_task` 交互委派模式下，Director 发起子任务委派所使用的标准提示词 (Prompt) 模板已整理归纳至对应的子模块文件中。你可以点击查看并加载具体的委派提示词：
+294|
+295|- **[Delegate Researcher (调研员委派)](delegates/delegate-researcher.md)**：包含 arXiv 检索、对立观点与事实出处要求。
+296|- **[Delegate Writer (编剧委派)](delegates/delegate-writer.md)**：包含“小Lin说”风格叙事指南与 VAS 规格要求。
+297|- **[Delegate Editor (润色师委派)](delegates/delegate-editor.md)**：包含 29 条 AI 痕迹排查、中文口语化调整及 VAS 标记强制保护要求。
+298|- **[Delegate Narrator (配音委派)](delegates/delegate-narrator.md)**：包含旁白提取、停顿控制、edge-tts 参数及 timing.json 结构要求。
+299|- **[Delegate Renderer (渲染器委派)](delegates/delegate-renderer.md)**：包含 Remotion 项目结构、外挂字幕政策、VAS→Remotion 映射表及 ffmpeg 裁剪 x-clip 规范。
+300|- **[Delegate Packager (包装师委派)](delegates/delegate-packager.md)**：包含 5 维度标题评分、YouTube 章节与 descriptions、B站/X包装规范。
+301|
 414|## Model Recommendations
 415|
 416|### Tier 1: Balanced (recommended)
@@ -496,8 +282,6 @@
 496|| Writer: script contains timecodes | Writer wrote estimated timestamps instead of scene names. Fix: Use Markdown section format `## {场景名} — {概括}`. Scene names (Hook, Act1_A...) are mapped to real timing by Narrator's timing.json. |
 497|| Writer: script uses old table format | Writer 用了旧的三栏表格格式。修复：输出必须是 Markdown section 格式——`## {场景名} — {概括}` + 旁白段落 + `[画面]` 标签。不要表格。 |
 498|| Gateway crash-loop: "Telegram bot token already in use" | **Remove** `TELEGRAM_BOT_TOKEN` from each video profile's `.env` (comment it out or delete the line). Do NOT use `gateway.skip_platforms` — this config key does not exist in Hermes and has no effect. Studio group chat uses the API Server adapter, not Telegram. |
-499|| Renderer: can't parse VAS visual descriptions | 脚本中的 `[画面]`/`[图表]`/`[动画]` 标签缺少 entrance/dur 参数，或使用了旧格式的模糊描述。修复：(1) 让 Writer 按 VAS 规格重新生成；(2) Renderer 自行加载 `references/writer-visual-animation-guide.md` 做兜底映射推断。 |
-500|| Renderer: animation timing doesn't match narration | VAS 中的 dur 参数是元素动画时长，不是场景总时长。场景总时长始终从 timing.json 取——检查 Sequence 是否正确使用了 timing.json 值，而非 VAS dur。 |
 501|| Group chat: agent behavior change not taking effect | 只修改了 SKILL.md 的 Delegate prompt，但群聊模式下 Agent 用的是自己的 `SOUL.md`。修复：同步修改 `~/.hermes/profiles/video-<role>/SOUL.md`。SKILL.md 的 delegate prompt 仅在 `delegate_task` 子代理模式生效。详见 Pitfalls 中的 SOUL.md 二元性条目。 |
 502|| Group chat: delegate_task uses old SKILL.md | 修改了 canonical SKILL.md 但 profile 本地副本未同步。修复：同步 canonical SKILL.md 到所有 `~/.hermes/profiles/video-*/skills/creative/video-studio-orchestrator/SKILL.md`。详见 Pitfalls 中的 profile 同步条目。 |
 503|| Studio: "@profile not in room" | **Most common cause: profile not added as an agent in the Hermes Studio room** (Web UI operation). Prerequisites to verify: (1) Each profile has its own gateway service installed+started. (2) `TELEGRAM_BOT_TOKEN` removed from each video profile's `.env`. (3) Each profile has independent `.env` (not symlink) with `GATEWAY_ALLOW_ALL_USERS=true`. (4) `HERMES_GROUP_CHAT_MAX_AGENT_MENTION_DEPTH=8` set. (5) Verify with `hermes profile list`. **If all green, the fix is: open Hermes Studio → add each video-* profile as an agent in the group chat room.** Full setup: `references/group-chat-visual-handoff.md`. Diagnostic checklist: `references/group-chat-diagnostics.md`. |
@@ -520,7 +304,7 @@
 520|- **⚠️ TTS-First is NON-NEGOTIABLE.** Script timestamps are estimates. Actual speech speed varies per sentence. The pipeline MUST: (1) format narration text with natural pause markers (double/triple newlines, ellipses), (2) generate TTS with `--write-subtitles narration.vtt`, (3) parse VTT for actual timestamps, (4) build Remotion scene timing from VTT, not from the script's timestamp column. Building animation before recording narration guarantees audio-video desync.
 521|- **Natural pauses make TTS sound human:** Between paragraphs use `\n\n` (~500ms pause), between sections use `\n\n\n` (~800ms), for emphasis use `...` (~300ms). Without these, TTS reads like a robot on fast-forward.
 522|- **Remotion `<Audio>` uses `staticFile()`**: `import { staticFile } from 'remotion'` then `<Audio src={staticFile("narration.mp3")} />`. Bare strings fail in render mode.
-523|- **Producer delegate_task may timeout**: 9 min video = ~35 min render. Split: Producer builds+TTS, Director renders.
+523|- **Renderer delegate_task may timeout**: 9 min video = ~35 min render. Split: Renderer builds the project, Director runs the final render.
 524|- **Remotion render syntax**: `npx remotion render <CompositionId> out/file.mp4` — CompositionId first, output second.
 525|- **BGM volume**: -18dB below narration.
 526|- **`delegate_task` context loss**: Pass full context in each delegation.
@@ -552,8 +336,8 @@
 552|
 553|| Script | Usage |
 554||--------|-------|
-555|| `scripts/extract-narration.sh` | Extract narration column from three-column scripts |
-556|| `scripts/vtt-to-subtitles.py` | Convert edge-tts VTT to Remotion `subtitles.ts` with frame-accurate timing |
+555|| `scripts/extract_narration.py` | Extract narration from Markdown section scripts (cross-platform Python) |
+556|| `scripts/vtt_to_subtitles.py` | Convert edge-tts VTT to Remotion `subtitles.ts` with frame-accurate timing |
 557|
 558|## Reference Files
 559|
@@ -567,10 +351,6 @@
 567|| `references/kanban-setup-guide.md` | Profile model config + gateway setup for Kanban mode |
 568|| `references/group-chat-visual-handoff.md` | Hermes Studio group-chat mode: exact @mentions, visible handoff chain, mention-depth setting |
 569|| `references/group-chat-diagnostics.md` | Diagnostic checklist for "not in room" — gateway state, .env, API server ports, Web UI room membership |
-570|| `references/gateway-skip-platforms-phantom.md` | Why `gateway.skip_platforms` doesn't exist and how to actually disable Telegram |
-571|| `references/hermes-web-ui-mention-bug.md` | Why agent-to-agent @mentions are broken in hermes-web-ui ≤ 0.6.10 and the hybrid workaround |
-572|| `references/agent-personas.md` | SOUL.md templates for Researcher, Writer, Editor, Narrator, Renderer, Packager |
-573|| `references/packager-persona.md` | SOUL.md template for Packager |
-574|| `references/writer-visual-animation-guide.md` | **VAS 视觉动画规格指南** — Writer ↔ Renderer 共享词汇。完整参数表、组件映射、前后对比示例、自检清单。 |
-575|| `/workspace/.hermes/plans/2026-06-08_writer-visual-animation-spec.md` | 实施计划：Writer 视觉动画规格化改造 (VAS)。8 个任务，6 个文件待修改。消除 Writer→Renderer 语义鸿沟。 |
-576|
+570|| `troubleshooting/known-bugs.md` | **已知 Bug 与临时变通方案** — 汇总多 Profile API Key、Telegram 端口冲突及 @mention 路由失效等问题的处理指南 |
+571|| `references/writer-visual-animation-guide.md` | **VAS 视觉动画规格指南** — Writer ↔ Renderer 共享词汇。完整参数表、组件映射、前后对比示例、自检清单。 |
+572|

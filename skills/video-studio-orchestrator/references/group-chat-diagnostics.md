@@ -93,7 +93,7 @@ This is the final check — profiles need to be added as agents in the Web UI ro
 
 ## Deleting a Profile
 
-If a profile is no longer needed (e.g., `video-producer` was removed):
+If a profile is no longer needed (e.g., `video-renderer` was removed):
 
 ```bash
 # 1. Kill the gateway process
