@@ -1,4 +1,4 @@
-# Video Studio Skills | 多 Agent 协作视频创作技能集
+# Video Studio Skills | 多 Agent 视频创作技能集
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Hermes Agent](https://img.shields.io/badge/Hermes-Agent-8A2BE2)](https://github.com/NousResearch/hermes-agent)
