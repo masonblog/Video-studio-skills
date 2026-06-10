@@ -114,7 +114,7 @@ After Packager @mentions Director, Director performs final quality review.
   → @video-packager     (package → @video-director for archival)
 ```
 
-**Critical rule:** Each agent @mentions EXACTLY ONE next agent. Never @mention multiple agents in one message. Director's topic selection message must contain only `@video-researcher` — not the full pipeline plan.
+**Critical rule:** Each agent @mentions EXACTLY ONE next agent. Never @mention multiple agents in one message. Director's topic selection message must contain only `@video-researcher` — not the full pipeline plan. Avoid `@all` except for explicit review/checkpoint moments.
 
 ## Hybrid option
 

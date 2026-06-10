@@ -31,10 +31,11 @@ hermes kanban boards create video-pipeline --name "视频管线"
 hermes kanban boards switch video-pipeline
 ```
 
-## 6-Task Pipeline (v2.0 with Narrator + Renderer)
+## 7-Task Pipeline (v2.0 with Narrator + Renderer)
 
 ```bash
-T1=$(hermes kanban create --assignee video-researcher --skill arxiv "调研：{topic}" --json | jq -r .id)
+T0=$(hermes kanban create --assignee video-director --skill plan "规划：{topic}" --json | jq -r .id)
+T1=$(hermes kanban create --assignee video-researcher --parent $T0 --skill arxiv "调研：{topic}" --json | jq -r .id)
 T2=$(hermes kanban create --assignee video-writer --parent $T1 "脚本：{topic}" --json | jq -r .id)
 T3=$(hermes kanban create --assignee video-editor --parent $T2 --skill humanizer "润色：{topic}" --json | jq -r .id)
 T4=$(hermes kanban create --assignee video-narrator --parent $T3 "配音：{topic}" --json | jq -r .id)
@@ -45,8 +46,8 @@ T6=$(hermes kanban create --assignee video-packager --parent $T5 "包装：{topi
 ## Verification
 
 ```bash
-hermes kanban list                    # T1 should be "ready", T2-T6 "todo"
-hermes kanban show $T1                # Check task details
+hermes kanban list                    # T0 should be "ready", T1-T6 "todo"
+hermes kanban show $T0                # Check task details
 hermes kanban daemon --interval 60    # Optional: dedicated dispatcher daemon
 ```
 

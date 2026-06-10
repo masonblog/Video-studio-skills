@@ -43,7 +43,7 @@ Default: `--rate=+10%` (matches podcast/educational video pacing).
 
 ### Step 1: Extract narration text
 ```bash
-bash scripts/extract-narration.sh script-final.md > narration-raw.txt
+python3 scripts/extract_narration.py script-final.md -o narration-raw.txt
 ```
 
 ### Step 2: Add pause markers
@@ -66,7 +66,7 @@ ffprobe public/narration.mp3 2>&1 | grep Duration
 
 ### Step 5: Generate subtitles.ts
 ```bash
-python3 scripts/vtt-to-subtitles.py public/narration.vtt 30 > src/subtitles.ts
+python3 scripts/vtt_to_subtitles.py public/narration.vtt --fps 30 -o src/subtitles.ts
 ```
 
 ### Step 6: Generate timing.json
@@ -118,6 +118,6 @@ Zero computation on Renderer's side — the timing is fully determined by the ac
 |---------|-------|-----|
 | TTS sounds robotic | No pause markers in text | Add `\n\n` every 2-3 sentences |
 | Video too short/long | Script timestamps ≠ TTS duration | TTS-First: let TTS determine total duration |
-| Subtitles not showing | VTT parsing failed | Check `vtt-to-subtitles.py` output for syntax errors |
+| Subtitles not showing | VTT parsing failed | Check `vtt_to_subtitles.py` output for syntax errors |
 | Audio 404 in render | Used bare string for Audio src | Use `staticFile("narration.mp3")` |
 | Pauses too long/short | `\n\n` spacing inconsistent | Standardize: exactly one blank line between paragraphs |
