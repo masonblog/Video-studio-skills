@@ -62,12 +62,24 @@ for agent in director researcher writer editor narrator renderer packager; do
 done
 ```
 
-## 快速开始
+## 运行模式 (如何开始)
 
-1. 在 Hermes Studio 群聊中 @video-director
-2. 说：**「做一期关于 [你的话题] 的视频」**
-3. Director 会创建项目计划，然后按顺序派发任务给各 Agent
-4. 最终在 `deliverables/` 目录拿到 MP4 + 包装素材
+Video Studio Skills 旨在多 Agent 环境中发挥最大威力。在 Hermes Studio 中，你可以根据偏好选择以下三种模式来运行视频生成管线：
+
+### 1. 群聊模式 (Group Chat Mode) —— 沉浸式全景监控 (默认推荐)
+**适合场景**：想全程围观 Agent 间的协作，且随时需要插话或调整方向。
+- **怎么用**：在 Hermes Studio 中创建一个包含所有 7 个 Agent 的群聊。
+- **流程**：你在群里直接 `@video-director` 说：「做一期关于 [你的话题] 的视频」。Director 会在群聊中依次 `@` 其他 Agent 派发任务，所有讨论和中间件交付对你完全公开。
+
+### 2. 委派模式 (Delegate Mode) —— 清爽的层级管理
+**适合场景**：不希望被海量聊天记录刷屏，只想要一个专属的「包工头」向你汇报。
+- **怎么用**：只需创建一个与 `video-director` 的单聊会话。
+- **流程**：你直接向 Director 下达任务。Director 会在后台利用 `delegate_task` 工具（子 Agent 调用机制）隐式派发调研、写稿、渲染等子任务。你只需要看 Director 的关键节点汇报和最终成品即可，工作流极其清爽。
+
+### 3. 看板模式 (Kanban Mode) —— 工业级流水线作业
+**适合场景**：适合长线的、大批量的视频生产，需要精确掌握每个视频当前处于哪个节点。
+- **怎么用**：通过项目看板文件（如 `kanban.md` 或项目管理工具）来驱动。
+- **流程**：你在看板的 "To Do" (待办) 列添加一个视频选题。Director 会自动将其拆解并分配给其他 Agent。Agent 认领任务并完成后，会将状态流转到下一阶段（例如从 Writer 移交到 Editor）。整个过程结构化、透明且易于追溯。
 
 ## 依赖
 
