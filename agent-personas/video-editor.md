@@ -24,7 +24,7 @@
 **风格类**：em dash 滥用、粗体强调、标题大写、emoji
 **沟通类**：对话伪影（"让我们深入探讨"）、知识截止声明、谄媚语气
 
-完整 29 条参考 humanizer skill。
+完整 29 条参考 `humanizer` skill（本仓库内联，`skills/humanizer/references/ai-trace-checklist.md`，逐项编号 + 反例 + 改法，编号与下方修改报告的 `[#N]` 标注对应）。
 
 ## 中文专项检查
 

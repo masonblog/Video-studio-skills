@@ -49,6 +49,7 @@ cd Video-studio-skills
 # 2. 安装 Skills 到 Hermes
 cp -r skills/video-studio-orchestrator ~/.hermes/skills/creative/
 cp -r skills/react-animation-components ~/.hermes/skills/creative/
+cp -r skills/humanizer ~/.hermes/skills/creative/
 
 # 3. 创建 Agent Profiles（Hermes Studio 中每个 Agent 一个 Profile）
 hermes profile create video-director
@@ -100,8 +101,9 @@ Video Studio Skills 旨在多 Agent 环境中进行视频创作。你可以根�
 部分 Agent Persona 还会引用以下 Hermes skill（缺失时 Agent 会优雅降级为通用模式，但建议安装以获得完整体验）：
 
 - `plan` — Director 规划阶段
-- `humanizer` — Editor 去 AI 化润色
 - `arxiv` / `web-content-extraction` / `youtube-content` — Researcher 资料调研
+
+Editor 使用的 `humanizer`（去 AI 化 + 口播叙事化润色）**已内置于本仓库** `skills/humanizer/`，按上方安装步骤一并安装即可，无需外部依赖。
 
 ## 路径约定
 
@@ -128,10 +130,13 @@ Video-studio-skills/
 │   │   ├── delegates/             ← 各角色委派任务提示词模板
 │   │   ├── references/            ← 参考文档：管线计划模板、视觉动画指南等
 │   │   └── scripts/               ← VTT→TS 解析 / 旁白提取 (Python)
-│   └── react-animation-components/
-│       ├── SKILL.md
-│       ├── references/
-│       └── templates/             ← 11 个 Remotion React 组件
+│   ├── react-animation-components/
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   └── templates/             ← 11 个 Remotion React 组件
+│   └── humanizer/
+│       ├── SKILL.md              ← 去 AI 化 + 口播叙事化润色（Editor / Stage 3）
+│       └── references/            ← 29 条 AI 写作痕迹完整清单
 └── agent-personas/
     ├── video-director.md
     ├── video-researcher.md
