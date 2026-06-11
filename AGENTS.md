@@ -50,6 +50,8 @@ Follow the instructions in `README.md`.
 | `skills/video-studio-orchestrator/scripts/` | vtt_to_subtitles.py, extract_narration.py |
 | `skills/react-animation-components/SKILL.md` | Remotion component library — load for rendering |
 | `skills/react-animation-components/templates/` | 11 TypeScript React components |
+| `skills/humanizer/SKILL.md` | De-AI + spoken-narration polishing skill — load for Stage 3 (Editor) |
+| `skills/humanizer/references/` | Full 29-item AI-trace checklist with examples |
 | `agent-personas/` | SOUL.md files for each of the 7 pipeline agents |
 
 ### Path Conventions
