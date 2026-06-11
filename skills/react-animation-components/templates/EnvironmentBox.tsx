@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCurrentFrame, spring, interpolate } from 'remotion';
+import { useCurrentFrame, useVideoConfig, spring, interpolate } from 'remotion';
 
 interface EnvironmentBoxProps {
   children: React.ReactNode;
@@ -20,11 +20,12 @@ export const EnvironmentBox: React.FC<EnvironmentBoxProps> = ({
   width = 500,
 }) => {
   const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
   const effectiveFrame = Math.max(0, frame - startFrame);
 
   const scale = spring({
     frame: effectiveFrame,
-    fps: 30,
+    fps,
     config: { damping: 15, stiffness: 120 },
   });
 

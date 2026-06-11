@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCurrentFrame, interpolate, spring } from 'remotion';
+import { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
 
 export interface ThoughtNode {
   id: string;
@@ -25,11 +25,12 @@ const TreeNodeComponent: React.FC<TreeNodeComponentProps> = ({
   maxDepth = 4,
 }) => {
   const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
   const effectiveFrame = Math.max(0, frame - startFrame);
 
   const scale = spring({
     frame: effectiveFrame,
-    fps: 30,
+    fps,
     config: { damping: 20, stiffness: 150 },
   });
 

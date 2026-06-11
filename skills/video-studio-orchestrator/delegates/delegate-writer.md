@@ -1,5 +1,7 @@
 # Delegate Writer Prompt Template
 
+> ⚠️ 本提示词与 `stages/stage-2-writing.md` 描述同一阶段的约束。修改任一文件时必须同步另一处，避免两种派发模式（群聊 / delegate_task）使用不一致的规范。
+
 ## 目标
 基于调研数据和全局规划，创作“小Lin说”故事风格的中深度视频脚本 `script-draft.md`。
 

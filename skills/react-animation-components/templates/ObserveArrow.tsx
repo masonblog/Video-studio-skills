@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCurrentFrame, interpolate } from 'remotion';
+import { interpolate } from 'remotion';
 
 interface ObserveArrowProps {
   progress: number;
@@ -17,8 +17,6 @@ export const ObserveArrow: React.FC<ObserveArrowProps> = ({
   label,
   topOffset = 60,
 }) => {
-  const frame = useCurrentFrame();
-
   // 回传箭头路径：Environment 左侧 → Agent 右侧（弯折路径，从下方回传）
   const pathD = 'M 1180 450 L 850 450 L 850 420';
 

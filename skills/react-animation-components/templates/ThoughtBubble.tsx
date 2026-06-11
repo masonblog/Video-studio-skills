@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCurrentFrame, spring, interpolate } from 'remotion';
+import { useCurrentFrame, useVideoConfig, spring, interpolate } from 'remotion';
 
 interface ThoughtBubbleProps {
   text: string;
@@ -21,11 +21,12 @@ export const ThoughtBubble: React.FC<ThoughtBubbleProps> = ({
   maxWidth = 380,
 }) => {
   const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
   const effectiveFrame = Math.max(0, frame - startFrame);
 
   const scale = spring({
     frame: effectiveFrame,
-    fps: 30,
+    fps,
     config: { damping: 12, stiffness: 100 },
   });
 

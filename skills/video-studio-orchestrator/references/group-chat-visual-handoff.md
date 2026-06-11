@@ -1,7 +1,7 @@
 # Hermes Studio Group Chat Visual Handoff
 
 > ⚠️ **Agent-to-agent @mention dispatch is BROKEN in hermes-web-ui ≤ 0.6.10.**  
-> The handoff chain described below (Director → Researcher → Writer → etc.) silently fails when agents @mention each other. See `references/hermes-web-ui-mention-bug.md` for the full investigation.  
+> The handoff chain described below (Director → Researcher → Writer → etc.) silently fails when agents @mention each other. See `troubleshooting/known-bugs.md` for the full investigation.  
 > **Workaround:** Use `delegate_task` for stage dispatch + post progress summaries to group chat for visibility.
 
 ## Why Director may look like it is working alone
@@ -114,7 +114,7 @@ After Packager @mentions Director, Director performs final quality review.
   → @video-packager     (package → @video-director for archival)
 ```
 
-**Critical rule:** Each agent @mentions EXACTLY ONE next agent. Never @mention multiple agents in one message. Director's topic selection message must contain only `@video-researcher` — not the full pipeline plan.
+**Critical rule:** Each agent @mentions EXACTLY ONE next agent. Never @mention multiple agents in one message. Director's topic selection message must contain only `@video-researcher` — not the full pipeline plan. Avoid `@all` except for explicit review/checkpoint moments.
 
 ## Hybrid option
 
